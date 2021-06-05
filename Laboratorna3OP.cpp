@@ -46,17 +46,23 @@ public:
 
 std::string console_interp(int, char*[]);
 int num_of_elements(std::string);
-std::string* divide_into_elements(std::string, int);
+std::string* divide_into_elements(std::string, int*);
 std::string* sort_station(std::string*, int);
 char priority(char, char);
 int get_through(std::string*, int);
 
 int main(int _argc, char* _argv[])
 {
-    std::string infix = console_interp(_argc, _argv);
+    //std::string infix = console_interp(_argc, _argv);
+    std::string infix;
+    getline(std::cin, infix);
     
     int n = num_of_elements(infix);
-    std::string* infix_alg = divide_into_elements(infix, n);
+    std::string* infix_alg = divide_into_elements(infix, &n);
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << infix_alg[i] << std::endl;
+    }
 
     std::string* out = sort_station(infix_alg, n);
     
@@ -79,9 +85,19 @@ std::string console_interp(int argc, char* argv[]) //interpreting console input
 int num_of_elements(std::string S) //getting number of elements
 {
     int count_el = 1;
-    for (int i = 0; i < S.length(); i ++)
+    int i = 0;
+    if (S[0] = '-')
     {
-        if (isdigit(S[i]) == 0)
+        count_el--;
+        i++;
+    }
+    for (i = 1; i < S.length(); i ++)
+    {
+        if ((isdigit(S[i]) == 0) and ((isdigit(S[i+1]))==0))
+        {
+            count_el++;
+        }
+        else if ((isdigit(S[i])) == 0)
         {
             count_el++;
             count_el++;
@@ -90,15 +106,46 @@ int num_of_elements(std::string S) //getting number of elements
     return count_el;
 }
 
-std::string* divide_into_elements(std::string D, int n) //dividing into operators and operands
+std::string* divide_into_elements(std::string D, int* n_ext) //dividing into operators and operands
 {
+    int n = *n_ext;
     std::string* L = new std::string[n];
     int i = 0;
     int k = 0;
     int j = 0;
-    for (j = 0; j < D.length(); j++)
+    if (D[0] == '-')
     {
-        if ((isdigit(D[j]) == 0))
+        j = 1;
+    }
+    while (j < D.length())
+    {
+        if ((isdigit(D[j]) == 0) and (D[j] == '(') and (D[j+1] == '-'))
+        {
+            j += 2;
+            k = j-1;
+            while (isdigit(D[j]) != 0)
+            {
+                j++;
+            }
+            L[i] = D.substr(k, j - k);
+            k = j;
+            *n_ext -= 1;
+            if (D[j] == ')')
+            {
+                k++;
+                j++;
+                *n_ext-=1;
+            }
+            i++;
+            if (j >= D.length())
+            {
+                break;
+            }
+            L[i] = D.substr(k, 1);
+            k++;
+            i++;
+        }
+        else if ((isdigit(D[j]) == 0))
         {
             L[i] = D.substr(k, j - k);
             k = j;
@@ -107,6 +154,7 @@ std::string* divide_into_elements(std::string D, int n) //dividing into operator
             i++;
             k++;
         }
+        j++;
     }
     L[i] = D.substr(k, j - k);
     return L;
@@ -121,7 +169,7 @@ std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
     int j = 0;
     while (j < n)
     {
-        if (isdigit(L[j][0]) != 0)
+        if ((L[j].length()>1) or ((isdigit(L[j][0])) != 0))
         {
             out[i] = L[j];
             i++;
@@ -196,7 +244,7 @@ int get_through(std::string* L, int n) //getting through recieved postfix form
     stack ST;
     for (int i = 0; i < n; i++)
     {
-        if (isdigit(L[i][0]) != 0)
+        if ((L[i].length() > 1) or ((isdigit(L[i][0]))!= 0))
         {
             ST.push_i(stoi(L[i]));
         }
