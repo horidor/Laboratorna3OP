@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+
 class stack //stack with two stacks - one for char, other for int
 {
 private:
@@ -57,7 +58,7 @@ int pow(int, int);
 int main(int _argc, char* _argv[])
 {
     std::string infix = console_interp(_argc, _argv);
-    //std::string infix; - debug testing
+    //std::string infix;                            //debug testing
     //getline(std::cin, infix);
     
     int n = num_of_elements(infix);
