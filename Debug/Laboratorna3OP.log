@@ -1,5 +1,5 @@
 ﻿  Laboratorna3OP.cpp
-C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(94,19): warning C4018: '<': signed/unsigned mismatch
-C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(120,14): warning C4018: '<': signed/unsigned mismatch
-C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(140,19): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(95,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(121,14): warning C4018: '<': signed/unsigned mismatch
+C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(141,19): warning C4018: '>=': signed/unsigned mismatch
   Laboratorna3OP.vcxproj -> C:\Users\topkek\source\repos\Laboratorna3OP\Debug\Laboratorna3OP.exe

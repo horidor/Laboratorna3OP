@@ -50,6 +50,7 @@ std::string* divide_into_elements(std::string, int*);
 std::string* sort_station(std::string*, int);
 char priority(char, char);
 int get_through(std::string*, int);
+int pow(int, int);
 
 int main(int _argc, char* _argv[])
 {
@@ -86,7 +87,7 @@ int num_of_elements(std::string S) //getting number of elements
 {
     int count_el = 1;
     int i = 0;
-    if (S[0] = '-')
+    if (S[0] == '-')
     {
         count_el--;
         i++;
@@ -213,7 +214,7 @@ char priority(char a, char b) //priority check
 {
     char a_n = ' ';
     char b_n = ' ';
-    char PRIORITY_LIST[8] = { '*','1','/','1','+','0','-','0' };
+    char PRIORITY_LIST[10] = { '^','2','*','1','/','1','+','0','-','0' };
     for (int i = 0; i < 8; i += 2)
     {
         if (a == PRIORITY_LIST[i])
@@ -284,8 +285,35 @@ int get_through(std::string* L, int n) //getting through recieved postfix form
                 ST.push_i(B / A);
                 break;
             }
+            case '^':
+            {
+                int A, B;
+                A = ST.pop_i();
+                B = ST.pop_i();
+                if (A >= 0)
+                {
+                    ST.push_i(pow(B, A));
+                }
+                else
+                {
+                    ST.push_i(1/pow(B,A));
+                }
+                break;
+            }
             }
         }
     }
     return ST.pop_i();
+}
+
+int pow(int a, int b) //recursive power function
+{
+    if (b > 0)
+    {
+        return a*pow(a,b-1);
+    }
+    else
+    {
+        return 1;
+    }
 }
