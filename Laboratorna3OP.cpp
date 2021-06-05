@@ -51,11 +51,6 @@ int main(int _argc, char* _argv[])
     int n = num_of_elements(infix);
     std::string* infix_alg = divide_into_elements(infix, n);
 
-    for (int i = 0; i < n; i++)
-    {
-        getline(std::cin, infix_alg[i]);
-    }
-
     std::string* out = sort_station(infix_alg, n);
     std::cout << std::endl;
     for (int i = 0; i < n; i++)
