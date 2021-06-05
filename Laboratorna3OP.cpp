@@ -4,28 +4,45 @@
 class stack
 {
 private:
-    int p_t;
-    char STACK[256];
+    int p_t_c;
+    int p_t_i;
+    char STACK_CHAR[256];
+    int STACK_INT[256];
 public:
     stack()
     {
-        p_t = 0;
+        p_t_c = 0;
+        p_t_i = 0;
     }
-    char pop()
+    char pop_c()
     {
-        p_t--;
-        return STACK[p_t];
+        p_t_c--;
+        return STACK_CHAR[p_t_c];
     }
-    void push(char v)
+    void push_c(char v)
     {   
-        STACK[p_t]=v;
-        p_t++;   
+        STACK_CHAR[p_t_c]=v;
+        p_t_c++;   
     }
-    int check_pt()
+    int check_pt_c()
     {
-        return p_t;
+        return p_t_c;
+    }
+    int pop_i()
+    {
+        p_t_i--;
+        return STACK_INT[p_t_i];
+    }
+    void push_i(int v)
+    {
+        STACK_INT[p_t_i] = v;
+    }
+    int check_pt_i()
+    {
+        return p_t_i;
     }
 };
+
 
 int num_of_elements(std::string);
 std::string* divide_into_elements(std::string, int);
@@ -114,33 +131,33 @@ std::string* sort_station(std::string* L, int n)
         }
         else
         {
-            if (ST.check_pt() == 0)
+            if (ST.check_pt_c() == 0)
             {
-                ST.push(L[j][0]);
+                ST.push_c(L[j][0]);
                 j++;
             }
             else
             {
-                l = ST.pop();
+                l = ST.pop_c();
                 if (priority(l, L[j][0]) == l)
                 {
                     out[i] = l;
-                    ST.push(L[j][0]);
+                    ST.push_c(L[j][0]);
                     i++;
                     j++;
                 }
                 else
                 {
-                    ST.push(l);
-                    ST.push(L[j][0]);
+                    ST.push_c(l);
+                    ST.push_c(L[j][0]);
                     j++;
                 }
             }
         }
     }
-    while (ST.check_pt() > 0)
+    while (ST.check_pt_c() > 0)
     {
-        out[i] = ST.pop();
+        out[i] = ST.pop_c();
         i++;
     }
     return out;
