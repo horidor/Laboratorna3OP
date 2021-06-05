@@ -36,6 +36,7 @@ public:
     void push_i(int v)
     {
         STACK_INT[p_t_i] = v;
+        p_t_i++;
     }
     int check_pt_i()
     {
@@ -48,6 +49,7 @@ int num_of_elements(std::string);
 std::string* divide_into_elements(std::string, int);
 std::string* sort_station(std::string*, int);
 char priority(char, char);
+int get_through(std::string*, int);
 
 int main(int _argc, char* _argv[])
 {
@@ -74,6 +76,9 @@ int main(int _argc, char* _argv[])
     {
         std::cout << out[i] << std::endl;
     }
+    
+    int sum = get_through(out, n);
+    std::cout << sum << std::endl;
 
 
 }
@@ -191,4 +196,55 @@ char priority(char a, char b)
     {
         return a;
     }
+}
+
+int get_through(std::string* L, int n)
+{
+    stack ST;
+    for (int i = 0; i < n; i++)
+    {
+        if (isdigit(L[i][0]) != 0)
+        {
+            ST.push_i(stoi(L[i]));
+        }
+        else
+        {
+            switch (L[i][0])
+            {
+            case '+':
+            {
+                int A, B;
+                A = ST.pop_i();
+                B = ST.pop_i();
+                ST.push_i(B + A);
+                break;
+            }
+            case '-':
+            {
+                int A, B;
+                A = ST.pop_i();
+                B = ST.pop_i();
+                ST.push_i(B - A);
+                break;
+            }
+            case '*':
+            {
+                int A, B;
+                A = ST.pop_i();
+                B = ST.pop_i();
+                ST.push_i(B * A);
+                break;
+            }
+            case '/':
+            {
+                int A, B;
+                A = ST.pop_i();
+                B = ST.pop_i();
+                ST.push_i(B / A);
+                break;
+            }
+            }
+        }
+    }
+    return ST.pop_i();
 }
