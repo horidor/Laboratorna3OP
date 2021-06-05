@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-class stack
+class stack //stack with two stacks - one for char, other for int
 {
 private:
     int p_t_c;
@@ -44,7 +44,7 @@ public:
     }
 };
 
-
+std::string console_interp(int, char*[]);
 int num_of_elements(std::string);
 std::string* divide_into_elements(std::string, int);
 std::string* sort_station(std::string*, int);
@@ -53,29 +53,12 @@ int get_through(std::string*, int);
 
 int main(int _argc, char* _argv[])
 {
-    std::cout << _argc << " - here." << std::endl;
-
-    for (int i = 0; i < _argc; i++)
-    {
-        std::cout << _argv[i] << std::endl;
-    }
-
-    std::string infix = "";
-    for (int i = 1; i < _argc; i++)
-    {
-        infix += _argv[i];
-    }
-    std::cout << infix << std::endl;
+    std::string infix = console_interp(_argc, _argv);
     
     int n = num_of_elements(infix);
     std::string* infix_alg = divide_into_elements(infix, n);
 
     std::string* out = sort_station(infix_alg, n);
-    std::cout << std::endl;
-    for (int i = 0; i < n; i++)
-    {
-        std::cout << out[i] << std::endl;
-    }
     
     int sum = get_through(out, n);
     std::cout << sum << std::endl;
@@ -83,7 +66,17 @@ int main(int _argc, char* _argv[])
 
 }
 
-int num_of_elements(std::string S)
+std::string console_interp(int argc, char* argv[]) //interpreting console input
+{
+    std::string L = "";
+    for (int i = 0; i < argc; i++)
+    {
+        L += argv[i];
+    }
+    return L;
+}
+
+int num_of_elements(std::string S) //getting number of elements
 {
     int count_el = 1;
     for (int i = 0; i < S.length(); i ++)
@@ -97,7 +90,7 @@ int num_of_elements(std::string S)
     return count_el;
 }
 
-std::string* divide_into_elements(std::string D, int n)
+std::string* divide_into_elements(std::string D, int n) //dividing into operators and operands
 {
     std::string* L = new std::string[n];
     int i = 0;
@@ -119,7 +112,7 @@ std::string* divide_into_elements(std::string D, int n)
     return L;
 }
 
-std::string* sort_station(std::string* L, int n)
+std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
 {
     stack ST;
     char l;
@@ -168,7 +161,7 @@ std::string* sort_station(std::string* L, int n)
     return out;
 }
 
-char priority(char a, char b)
+char priority(char a, char b) //priority check
 {
     char a_n = ' ';
     char b_n = ' ';
@@ -198,7 +191,7 @@ char priority(char a, char b)
     }
 }
 
-int get_through(std::string* L, int n)
+int get_through(std::string* L, int n) //getting through recieved postfix form
 {
     stack ST;
     for (int i = 0; i < n; i++)
