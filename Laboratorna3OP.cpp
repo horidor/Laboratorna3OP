@@ -54,14 +54,17 @@ int get_through(std::string*, int);
 int main(int _argc, char* _argv[])
 {
     std::string infix = console_interp(_argc, _argv);
+    //std::string infix;                            //DEBUG_test
+    //getline(std::cin, infix);
     
     int n = num_of_elements(infix);
     std::string* infix_alg = divide_into_elements(infix, n);
 
-    std::string* out = sort_station(infix_alg, n);
     
+    std::string* out = sort_station(infix_alg, n);
+
     int sum = get_through(out, n);
-    std::cout << sum << std::endl;
+    std::cout << "Result: " << sum << std::endl;
 
 
 }
@@ -69,7 +72,7 @@ int main(int _argc, char* _argv[])
 std::string console_interp(int argc, char* argv[]) //interpreting console input
 {
     std::string L = "";
-    for (int i = 0; i < argc; i++)
+    for (int i = 1; i < argc; i++)
     {
         L += argv[i];
     }
@@ -119,8 +122,10 @@ std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
     std::string* out = new std::string[n];
     int i = 0;
     int j = 0;
+    bool flag;
     while (j < n)
     {
+        flag = true;
         if (isdigit(L[j][0]) != 0)
         {
             out[i] = L[j];
@@ -136,19 +141,22 @@ std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
             }
             else
             {
-                l = ST.pop_c();
-                if (priority(l, L[j][0]) == l)
+                while (flag)
                 {
-                    out[i] = l;
-                    ST.push_c(L[j][0]);
-                    i++;
-                    j++;
-                }
-                else
-                {
-                    ST.push_c(l);
-                    ST.push_c(L[j][0]);
-                    j++;
+                    l = ST.pop_c();
+                    if ((priority(l, L[j][0]) == l))
+                    {
+                        out[i] = l;
+                        i++;
+                    }
+                    else
+                    {
+                        ST.push_c(l);
+                        ST.push_c(L[j][0]);
+                        j++;
+                        flag = false;
+                    }
+
                 }
             }
         }
