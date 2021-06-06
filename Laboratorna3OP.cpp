@@ -57,9 +57,9 @@ int pow(int, int);
 
 int main(int _argc, char* _argv[])
 {
-    std::string infix = console_interp(_argc, _argv);
-    //std::string infix;                            //debug testing
-    //getline(std::cin, infix);
+    //std::string infix = console_interp(_argc, _argv);
+    std::string infix;                            //debug testing
+    getline(std::cin, infix);
     
     int n = num_of_elements(infix);
     std::string* infix_alg = divide_into_elements(infix, n);
@@ -83,7 +83,7 @@ int main(int _argc, char* _argv[])
 std::string console_interp(int argc, char* argv[]) //interpreting console input
 {
     std::string L = "";
-    for (int i = 0; i < argc; i++)
+    for (int i = 1; i < argc; i++)
     {
         L += argv[i];
     }
@@ -123,13 +123,6 @@ std::string* divide_into_elements(std::string D, int n) //dividing into operator
     if (D[0] == '-')
     {
         j = 1;
-    }
-    else if (D[0] == '(')
-    {
-        L[i] = D.substr(0, 1);
-        j = 1;
-        k = 1;
-        i++;
     }
     while (j < D.length())
     {
