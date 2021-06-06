@@ -186,8 +186,10 @@ std::string* sort_station(std::string* L, int* n_ext) //Shunting-Yard algorithm
     std::string* out = new std::string[n];
     int i = 0;
     int j = 0;
+    bool flag;
     while (j < n)
     {
+        flag = true;
         if ((L[j].length()>1) or ((isdigit(L[j][0])) != 0))
         {
             out[i] = L[j];
@@ -222,16 +224,25 @@ std::string* sort_station(std::string* L, int* n_ext) //Shunting-Yard algorithm
                     ST.push_c(l);
                     ST.push_c(L[j][0]);
                 }
-                else if (priority(l, L[j][0]) == l)
-                {
-                    out[i] = l;
-                    ST.push_c(L[j][0]);
-                    i++;
-                }
                 else
                 {
                     ST.push_c(l);
-                    ST.push_c(L[j][0]);
+                    while (flag)
+                    {
+                        l = ST.pop_c();
+                        if (priority(l, L[j][0]) == l)
+                        {
+                            out[i] = l;
+                            ST.push_c(L[j][0]);
+                            i++;
+                        }
+                        else
+                        {
+                            ST.push_c(l);
+                            ST.push_c(L[j][0]);
+                            flag = false;
+                        }
+                    }
                 }
             }
         }
