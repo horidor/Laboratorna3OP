@@ -1,46 +1,30 @@
 #include <iostream>
 #include <string>
 
+template <class T>
 class stack //stack with two stacks - one for char, other for int
 {
 private:
-    int p_t_c;
-    int p_t_i;
-    char STACK_CHAR[256];
-    int STACK_INT[256];
+    int p_t;
+    T STACK[256];
 public:
     stack()
     {
-        p_t_c = 0;
-        p_t_i = 0;
+        p_t = 0;
     }
-    char pop_c()
+    char pop()
     {
-        p_t_c--;
-        return STACK_CHAR[p_t_c];
+        p_t--;
+        return STACK[p_t];
     }
-    void push_c(char v)
+    void push(T v)
     {   
-        STACK_CHAR[p_t_c]=v;
-        p_t_c++;   
+        STACK[p_t]=v;
+        p_t++;   
     }
-    int check_pt_c()
+    T check_pt()
     {
-        return p_t_c;
-    }
-    int pop_i()
-    {
-        p_t_i--;
-        return STACK_INT[p_t_i];
-    }
-    void push_i(int v)
-    {
-        STACK_INT[p_t_i] = v;
-        p_t_i++;
-    }
-    int check_pt_i()
-    {
-        return p_t_i;
+        return p_t;
     }
 };
 
@@ -53,15 +37,23 @@ int get_through(std::string*, int);
 
 int main(int _argc, char* _argv[])
 {
-    std::string infix = console_interp(_argc, _argv);
-    //std::string infix;                            //DEBUG_test
-    //getline(std::cin, infix);
+    //std::string infix = console_interp(_argc, _argv);
+    std::string infix;                            //DEBUG_test
+    getline(std::cin, infix);
     
     int n = num_of_elements(infix);
     std::string* infix_alg = divide_into_elements(infix, n);
-
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << infix_alg[i] << std::endl;
+    }
+    std::cout << std::endl;
     
     std::string* out = sort_station(infix_alg, n);
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << out[i] << std::endl;
+    }
 
     int sum = get_through(out, n);
     std::cout << "Result: " << sum << std::endl;
@@ -117,7 +109,7 @@ std::string* divide_into_elements(std::string D, int n) //dividing into operator
 
 std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
 {
-    stack ST;
+    stack<char> ST;
     char l;
     std::string* out = new std::string[n];
     int i = 0;
@@ -134,16 +126,16 @@ std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
         }
         else
         {
-            if (ST.check_pt_c() == 0)
+            if (ST.check_pt() == 0)
             {
-                ST.push_c(L[j][0]);
+                ST.push(L[j][0]);
                 j++;
             }
             else
             {
                 while (flag)
                 {
-                    l = ST.pop_c();
+                    l = ST.pop();
                     if ((priority(l, L[j][0]) == l))
                     {
                         out[i] = l;
@@ -151,8 +143,8 @@ std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
                     }
                     else
                     {
-                        ST.push_c(l);
-                        ST.push_c(L[j][0]);
+                        ST.push(l);
+                        ST.push(L[j][0]);
                         j++;
                         flag = false;
                     }
@@ -161,9 +153,9 @@ std::string* sort_station(std::string* L, int n) //Shunting-Yard sort
             }
         }
     }
-    while (ST.check_pt_c() > 0)
+    while (ST.check_pt() > 0)
     {
-        out[i] = ST.pop_c();
+        out[i] = ST.pop();
         i++;
     }
     return out;
@@ -201,12 +193,12 @@ char priority(char a, char b) //priority check
 
 int get_through(std::string* L, int n) //getting through recieved postfix form
 {
-    stack ST;
+    stack<int> ST;
     for (int i = 0; i < n; i++)
     {
         if (isdigit(L[i][0]) != 0)
         {
-            ST.push_i(stoi(L[i]));
+            ST.push(stoi(L[i]));
         }
         else
         {
@@ -215,37 +207,37 @@ int get_through(std::string* L, int n) //getting through recieved postfix form
             case '+':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B + A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B + A);
                 break;
             }
             case '-':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B - A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B - A);
                 break;
             }
             case '*':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B * A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B * A);
                 break;
             }
             case '/':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B / A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B / A);
                 break;
             }
             }
         }
     }
-    return ST.pop_i();
+    return ST.pop();
 }
