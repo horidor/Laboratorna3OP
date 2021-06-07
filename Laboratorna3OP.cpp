@@ -2,7 +2,7 @@
 #include <string>
 
 template <class T>
-class stack //stack with two stacks - one for char, other for int
+class stack //stack with template
 {
 private:
     int p_t;
@@ -12,7 +12,7 @@ public:
     {
         p_t = 0;
     }
-    char pop()
+    T pop()
     {
         p_t--;
         return STACK[p_t];
@@ -37,9 +37,9 @@ int get_through(std::string*, int);
 
 int main(int _argc, char* _argv[])
 {
-    //std::string infix = console_interp(_argc, _argv);
-    std::string infix;                            //DEBUG_test
-    getline(std::cin, infix);
+    std::string infix = console_interp(_argc, _argv);
+    //std::string infix;                            //DEBUG_test
+    //getline(std::cin, infix);
     
     int n = num_of_elements(infix);
     std::string* infix_alg = divide_into_elements(infix, n);
@@ -206,34 +206,38 @@ int get_through(std::string* L, int n) //getting through recieved postfix form
             {
             case '+':
             {
-                int A, B;
+                int A, B, C;
                 A = ST.pop();
                 B = ST.pop();
-                ST.push(B + A);
+                C = B + A;
+                ST.push(C);
                 break;
             }
             case '-':
             {
-                int A, B;
+                int A, B, C;
                 A = ST.pop();
                 B = ST.pop();
-                ST.push(B - A);
+                C = B - A;
+                ST.push(C);
                 break;
             }
             case '*':
             {
-                int A, B;
+                int A, B, C;
                 A = ST.pop();
                 B = ST.pop();
-                ST.push(B * A);
+                C = B * A;
+                ST.push(C);
                 break;
             }
             case '/':
             {
-                int A, B;
+                int A, B, C;
                 A = ST.pop();
                 B = ST.pop();
-                ST.push(B / A);
+                C = B / A;
+                ST.push(C);
                 break;
             }
             }
