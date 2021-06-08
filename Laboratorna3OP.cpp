@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 
-
 class stack //stack with two stacks - one for char, other for int
 {
 private:
@@ -57,27 +56,19 @@ int pow(int, int);
 
 int main(int _argc, char* _argv[])
 {
-    //std::string infix = console_interp(_argc, _argv);
-    std::string infix;                            //debug testing
-    getline(std::cin, infix);
+    std::string infix = console_interp(_argc, _argv);
+    //std::string infix;                            //debug testing
+    //getline(std::cin, infix);
     
     int n = num_of_elements(infix);
     std::string* infix_alg = divide_into_elements(infix, n);
-    for (int i = 0; i < n; i++)
-    {
-        std::cout << infix_alg[i] << std::endl;
-    }
 
     std::string* out_temp = sort_station(infix_alg, &n);
     std::string* out = new std::string[n];
     out = out_temp;
-    for (int i = 0; i < n; i++)
-    {
-        std::cout << out[i] << std::endl;
-    }
 
     int sum = get_through(out, n);
-    std::cout << sum << std::endl;
+    std::cout << "Result: " << sum << std::endl;
 }
 
 std::string console_interp(int argc, char* argv[]) //interpreting console input
@@ -92,23 +83,39 @@ std::string console_interp(int argc, char* argv[]) //interpreting console input
 
 int num_of_elements(std::string S) //getting number of elements
 {
-    int count_el = 1;
-    int i = 0;
-    if (S[0] == '-')
+    int count_el = 0;
+    bool flag = true;
+    for (int i = 0; i < S.length(); i++)
     {
-        count_el--;
-        i++;
-    }
-    for (i = 1; i < S.length(); i ++)
-    {
-        if (((isdigit(S[i]) == 0) and ((isdigit(S[i + 1])) == 0)) or (S.length() - 1 == i))
+        switch (S[i])
         {
+        case '+':
+        case '/':
+        case '^':
+        case '*':
+        case '(':
+        case ')':
+            flag = true;
             count_el++;
-        }
-        else if ((isdigit(S[i])) == 0)
-        {
-            count_el++;
-            count_el++;
+            break;
+        case '-':
+            if (i == 0)
+                ;
+            else if (S[i - 1] == '(')
+                ;
+            else
+            {
+                count_el++;
+                
+            }
+            flag = true;
+            break;
+        default:
+            if (flag)
+            {
+                count_el++;
+                flag = false;
+            }
         }
     }
     return count_el;
@@ -126,11 +133,10 @@ std::string* divide_into_elements(std::string D, int n) //dividing into operator
     }
     while (j < D.length())
     {
-        if ((isdigit(D[j]) == 0) and (k - j == 0))
+        if ((isdigit(D[j]) == 0) and (k - j == 0) and (isdigit(D[j + 1]) != 0))
         {
             L[i] = D.substr(j, 1);
             k++;
-            j++;
             i++;
         }
         else if ((isdigit(D[j]) == 0) and (D[j] == '(') and (D[j+1] == '-'))
@@ -174,7 +180,10 @@ std::string* divide_into_elements(std::string D, int n) //dividing into operator
         }
         j++;
     }
-    L[i] = D.substr(k, j - k);
+    if (i < n)
+    {
+        L[i] = D.substr(k, j - k);
+    }
     return L;
 }
 
@@ -189,66 +198,58 @@ std::string* sort_station(std::string* L, int* n_ext) //Shunting-Yard algorithm
     bool flag;
     while (j < n)
     {
-        flag = true;
-        if ((L[j].length()>1) or ((isdigit(L[j][0])) != 0))
+        if ((L[j].length() > 1) or (isdigit(L[j][0]) != 0))
         {
             out[i] = L[j];
             i++;
         }
-        else if ((L[j][0]) == '(')
-        {
-            ST.push_c(L[j][0]);
-        }
-        else if ((L[j][0]) == ')')
-        {
-            while (out[i-1] != "(")
-            {
-                out[i]=ST.pop_c();
-                i++;
-            }
-            out[i - 1] == "";
-            i--;
-            *n_ext -= 2;
-        }
         else
         {
-            if ((ST.check_pt_c() == -1))
+            if ((L[j][0] != ')') and (L[j][0] != '('))
+            {
+                while (ST.check_pt_c() > -1)
+                {
+                    l = ST.pop_c();
+                    if (l == '(')
+                    {
+                        ST.push_c(l);
+                        break;
+                    }
+                    else if (priority(l, L[j][0]) == l)
+                    {
+                        out[i] = l;
+                        i++;
+                    }
+                    else
+                    {
+                        ST.push_c(l);
+                        break;
+                    }
+                }
+                ST.push_c(L[j][0]);
+            }
+            else if (L[j][0] == '(')
             {
                 ST.push_c(L[j][0]);
             }
-            else
+            else if (L[j][0] == ')')
             {
-                l = ST.pop_c();
-                if (l == '(')
+                while (ST.check_pt_c() > -1)
                 {
-                    ST.push_c(l);
-                    ST.push_c(L[j][0]);
-                }
-                else
-                {
-                    ST.push_c(l);
-                    while (flag)
+                    l = ST.pop_c();
+                    if (l == '(')
                     {
-                        l = ST.pop_c();
-                        if (priority(l, L[j][0]) == l)
-                        {
-                            out[i] = l;
-                            ST.push_c(L[j][0]);
-                            i++;
-                        }
-                        else
-                        {
-                            ST.push_c(l);
-                            ST.push_c(L[j][0]);
-                            flag = false;
-                        }
+                        *n_ext -= 2;
+                        break;
                     }
+                    out[i] = l;
+                    i++;
                 }
             }
         }
         j++;
     }
-    while (ST.check_pt_c() != -1)
+    while (ST.check_pt_c() > -1)
     {
         out[i] = ST.pop_c();
         i++;
@@ -261,7 +262,7 @@ char priority(char a, char b) //priority check
     char a_n = ' ';
     char b_n = ' ';
     char PRIORITY_LIST[10] = { '^','2','*','1','/','1','+','0','-','0' };
-    for (int i = 0; i < 8; i += 2)
+    for (int i = 0; i < 10; i += 2)
     {
         if (a == PRIORITY_LIST[i])
         {
@@ -276,7 +277,7 @@ char priority(char a, char b) //priority check
     {
         return a;
     }
-    else if (a_n < b_n)
+    else if ((a_n < b_n) or ((a_n == b_n) and (a == '^')))
     {
         return b;
     }

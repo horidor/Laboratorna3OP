@@ -1,6 +1,6 @@
 ﻿  Laboratorna3OP.cpp
-C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(102,19): warning C4018: '<': signed/unsigned mismatch
-C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(127,14): warning C4018: '<': signed/unsigned mismatch
-C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(157,19): warning C4018: '>=': signed/unsigned mismatch
-C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(209,24): warning C4834: discarding return value of function with 'nodiscard' attribute
+C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(89,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(135,14): warning C4018: '<': signed/unsigned mismatch
+C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(164,19): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\topkek\source\repos\Laboratorna3OP\Laboratorna3OP\Laboratorna3OP.cpp(199,10): warning C4101: 'flag': unreferenced local variable
   Laboratorna3OP.vcxproj -> C:\Users\topkek\source\repos\Laboratorna3OP\Debug\Laboratorna3OP.exe
