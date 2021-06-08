@@ -14,13 +14,13 @@ public:
     }
     T pop()
     {
-        p_t_c--;
-        return STACK_CHAR[p_t_c+1];
+        p_t--;
+        return STACK[p_t+1];
     }
     void push(T v)
     {   
-        p_t_c++;
-        STACK_CHAR[p_t_c]=v; 
+        p_t++;
+        STACK_CHAR[p_t]=v; 
     }
     int check_pt()
     {
