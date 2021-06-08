@@ -1,48 +1,30 @@
 #include <iostream>
 #include <string>
 
-class stack //stack with two stacks - one for char, other for int
+template <class T>
+class stack //stack with templates
 {
 private:
-    int p_t_c;
-    int p_t_i;
-    char STACK_CHAR[256];
-    int STACK_INT[256];
+    int p_t;
+    T STACK[256];
 public:
     stack()
     {
-        p_t_c = -1;
-        p_t_i = -1;
+        p_t = -1;
     }
-    char pop_c()
+    T pop()
     {
         p_t_c--;
         return STACK_CHAR[p_t_c+1];
-        
     }
-    void push_c(char v)
+    void push(T v)
     {   
         p_t_c++;
-        STACK_CHAR[p_t_c]=v;
-        
+        STACK_CHAR[p_t_c]=v; 
     }
-    int check_pt_c()
+    int check_pt()
     {
-        return p_t_c;
-    }
-    int pop_i()
-    {
-        p_t_i--;
-        return STACK_INT[p_t_i+1];
-    }
-    void push_i(int v)
-    {
-        p_t_i++;
-        STACK_INT[p_t_i] = v;
-    }
-    int check_top_i()
-    {
-        return p_t_i;
+        return p_t;
     }
 };
 
@@ -190,7 +172,7 @@ std::string* divide_into_elements(std::string D, int n) //dividing into operator
 std::string* sort_station(std::string* L, int* n_ext) //Shunting-Yard algorithm
 {
     int n = *n_ext;
-    stack ST;
+    stack<char> ST;
     char l;
     std::string* out = new std::string[n];
     int i = 0;
@@ -207,12 +189,12 @@ std::string* sort_station(std::string* L, int* n_ext) //Shunting-Yard algorithm
         {
             if ((L[j][0] != ')') and (L[j][0] != '('))
             {
-                while (ST.check_pt_c() > -1)
+                while (ST.check_pt() > -1)
                 {
-                    l = ST.pop_c();
+                    l = ST.pop();
                     if (l == '(')
                     {
-                        ST.push_c(l);
+                        ST.push(l);
                         break;
                     }
                     else if (priority(l, L[j][0]) == l)
@@ -222,21 +204,21 @@ std::string* sort_station(std::string* L, int* n_ext) //Shunting-Yard algorithm
                     }
                     else
                     {
-                        ST.push_c(l);
+                        ST.push(l);
                         break;
                     }
                 }
-                ST.push_c(L[j][0]);
+                ST.push(L[j][0]);
             }
             else if (L[j][0] == '(')
             {
-                ST.push_c(L[j][0]);
+                ST.push(L[j][0]);
             }
             else if (L[j][0] == ')')
             {
-                while (ST.check_pt_c() > -1)
+                while (ST.check_pt() > -1)
                 {
-                    l = ST.pop_c();
+                    l = ST.pop();
                     if (l == '(')
                     {
                         *n_ext -= 2;
@@ -249,9 +231,9 @@ std::string* sort_station(std::string* L, int* n_ext) //Shunting-Yard algorithm
         }
         j++;
     }
-    while (ST.check_pt_c() > -1)
+    while (ST.check_pt() > -1)
     {
-        out[i] = ST.pop_c();
+        out[i] = ST.pop();
         i++;
     }
     return out;
@@ -289,12 +271,12 @@ char priority(char a, char b) //priority check
 
 int get_through(std::string* L, int n) //getting through recieved postfix form
 {
-    stack ST;
+    stack<int> ST;
     for (int i = 0; i < n; i++)
     {
         if ((L[i].length() > 1) or ((isdigit(L[i][0]))!= 0))
         {
-            ST.push_i(stoi(L[i]));
+            ST.push(stoi(L[i]));
         }
         else
         {
@@ -303,54 +285,54 @@ int get_through(std::string* L, int n) //getting through recieved postfix form
             case '+':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B + A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B + A);
                 break;
             }
             case '-':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B - A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B - A);
                 break;
             }
             case '*':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B * A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B * A);
                 break;
             }
             case '/':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
-                ST.push_i(B / A);
+                A = ST.pop();
+                B = ST.pop();
+                ST.push(B / A);
                 break;
             }
             case '^':
             {
                 int A, B;
-                A = ST.pop_i();
-                B = ST.pop_i();
+                A = ST.pop();
+                B = ST.pop();
                 if (A >= 0)
                 {
-                    ST.push_i(pow(B, A));
+                    ST.push(pow(B, A));
                 }
                 else
                 {
-                    ST.push_i(1/pow(B,A));
+                    ST.push(1/pow(B,A));
                 }
                 break;
             }
             }
         }
     }
-    return ST.pop_i();
+    return ST.pop();
 }
 
 int pow(int a, int b) //recursive power function
